@@ -11,17 +11,20 @@
 @implementation FISCaesarCipher
 //define methods here
 -(NSString*)encodeWithMessage:(NSString*)message andOffset:(NSInteger)key {
-    NSCharacterSet *charsToIgnore = [NSCharacterSet letterCharacterSet];
+    NSCharacterSet *charsToIgnore = [[NSCharacterSet letterCharacterSet] invertedSet];
     NSCharacterSet *upperCaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet *lowerCaseLetters = [NSCharacterSet lowercaseLetterCharacterSet];
-    
+NSLog(@"Line 17: key = %ul", key);
     //All multiples of 26 come "full-circle" around the alphabet. We get rid of them to simplify the problem.
     NSInteger modKey = key % 26;
+NSLog(@"Line 20: modKey = %ul", modKey);
     
-    NSMutableString *workingMessage = [NSMutableString stringWithString:message];
-    
-    for (NSInteger i = 0; i < workingMessage.length; i++) {
-        NSInteger workingASCIIChar = [workingMessage characterAtIndex:i];
+//    NSMutableString *workingMessage = [NSMutableString stringWithString:message];
+    NSMutableArray *workingMessage = [[NSMutableArray alloc] init];
+
+    for (NSInteger i = 0; i < message.length; i++) {
+        NSInteger workingASCIIChar = [message characterAtIndex:i];
+NSLog(@"Loop %ul: workingASCIIChar = %C", i, workingASCIIChar);
         if ([charsToIgnore characterIsMember: workingASCIIChar])
             continue;
         
@@ -40,10 +43,10 @@
                  (isLowercase && workingASCIIChar < 97))
                 workingASCIIChar += 26;
         
-        workingMessage[i] = [[NSString stringWithFormat:@"%C", (unichar)workingASCIIChar]mutableCopy];
+        [workingMessage addObject:[[NSString stringWithFormat:@"%C", (unichar)workingASCIIChar]mutableCopy]];
     } //closes for-loop
     
-    return @"";
+    return [workingMessage copy];
 }
 
 
