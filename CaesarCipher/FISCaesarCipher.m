@@ -14,10 +14,10 @@
     NSCharacterSet *charsToIgnore = [[NSCharacterSet letterCharacterSet] invertedSet];
     NSCharacterSet *upperCaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet *lowerCaseLetters = [NSCharacterSet lowercaseLetterCharacterSet];
-NSLog(@"Line 17: key = %ul", key);
+NSLog(@"Line 17: key = %ld", key);
     //All multiples of 26 come "full-circle" around the alphabet. We get rid of them to simplify the problem.
     NSInteger modKey = key % 26;
-NSLog(@"Line 20: modKey = %ul", modKey);
+NSLog(@"Line 20: modKey = %ld", modKey);
     
 //    NSMutableString *workingMessage = [NSMutableString stringWithString:message];
     NSMutableArray *workingMessage = [[NSMutableArray alloc] init];
