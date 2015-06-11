@@ -12,7 +12,7 @@
 @implementation FISCaesarCipher
 //define methods here
 -(NSString*)encodeWithMessage:(NSString*)message andOffset:(NSInteger)key {
-    NSCharacterSet *charsToIgnore = [[NSCharacterSet letterCharacterSet] invertedSet];
+    NSCharacterSet *charsToEncode = [NSCharacterSet letterCharacterSet];
     NSCharacterSet *upperCaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet *lowerCaseLetters = [NSCharacterSet lowercaseLetterCharacterSet];
 NSLog(@"Line 17: key = %ld", key);
@@ -24,24 +24,23 @@ NSLog(@"Line 20: modKey = %ld", modKey);
     NSMutableArray *workingMessage = [[NSMutableArray alloc] init];
     for (NSInteger i = 0; i < message.length; i++) {
         NSInteger workingASCIIChar = [message characterAtIndex:i];
+
+        //        BOOL isLowercase = NO;
 NSLog(@"Loop %ul: workingASCIIChar = %C", i, workingASCIIChar);
-        if ([charsToIgnore characterIsMember: workingASCIIChar])
-            continue;
-        
-        BOOL isUppercase = NO;
-        if ([upperCaseLetters characterIsMember: workingASCIIChar])
-            isUppercase = YES;
-        BOOL isLowercase = !isUppercase;
-//        BOOL isLowercase = NO;
-        workingASCIIChar += modKey; //the actual encoding
-        
-//        word-wrapping (z + 3 --> c)
-        if ((isUppercase && workingASCIIChar > 90) ||
-            (isLowercase && workingASCIIChar > 122))
-                workingASCIIChar -= 26;
-        else if ((isUppercase && workingASCIIChar < 65) ||
-                 (isLowercase && workingASCIIChar < 97))
-                workingASCIIChar += 26;
+        if ([charsToEncode characterIsMember: workingASCIIChar]) {
+            BOOL isUppercase = [upperCaseLetters characterIsMember: workingASCIIChar] ? YES : NO;
+            BOOL isLowercase = !isUppercase;
+
+            workingASCIIChar += modKey; //the actual encoding
+            
+    //        word-wrapping (z + 3 --> c)
+            if ((isUppercase && workingASCIIChar > 90) ||
+                (isLowercase && workingASCIIChar > 122))
+                    workingASCIIChar -= 26;
+            else if ((isUppercase && workingASCIIChar < 65) ||
+                     (isLowercase && workingASCIIChar < 97))
+                    workingASCIIChar += 26;
+        }
         
         [workingMessage addObject:[[NSString stringWithFormat:@"%C", (unichar)workingASCIIChar]mutableCopy]];
     } //closes for-loop
