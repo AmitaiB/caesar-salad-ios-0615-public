@@ -15,23 +15,33 @@
     NSCharacterSet *upperCaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet *lowerCaseLetters = [NSCharacterSet lowercaseLetterCharacterSet];
     
+    //All multiples of 26 come "full-circle" around the alphabet. We get rid of them to simplify the problem.
+    NSInteger modKey = key % 26;
     
     NSMutableString *workingMessage = [NSMutableString stringWithString:message];
+    
     for (NSInteger i = 0; i < workingMessage.length; i++) {
         NSInteger workingASCIIChar = [workingMessage characterAtIndex:i];
+        if ([charsToIgnore characterIsMember: workingASCIIChar])
+            continue;
+        
         BOOL isUppercase = NO;
+        if ([upperCaseLetters characterIsMember: workingASCIIChar])
+            isUppercase = YES;
+        BOOL isLowercase = !isUppercase;
 //        BOOL isLowercase = NO;
+        workingASCIIChar += modKey; //the actual encoding
         
-        if ([[charsToIgnore characterIsMember: workingASCIIChar])
-             continue;
-        else if ([[charsToIgnore characterIsMember: workingASCIIChar])
-             
-             workingASCIIChar += 3;
-    
-             
+//        word-wrapping (z + 3 --> c)
+        if ((isUppercase && workingASCIIChar > 90) ||
+            (isLowercase && workingASCIIChar > 122))
+                workingASCIIChar -= 26;
+        else if ((isUppercase && workingASCIIChar < 65) ||
+                 (isLowercase && workingASCIIChar < 97))
+                workingASCIIChar += 26;
         
-        
-    }
+        workingMessage[i] = [[NSString stringWithFormat:@"%C", (unichar)workingASCIIChar]mutableCopy];
+    } //closes for-loop
     
     return @"";
 }
