@@ -7,6 +7,7 @@
 //
 
 #import "FISCaesarCipher.h"
+#import <objc/objc-runtime.h>
 
 @implementation FISCaesarCipher
 //define methods here
@@ -21,7 +22,6 @@ NSLog(@"Line 20: modKey = %ld", modKey);
     
 //    NSMutableString *workingMessage = [NSMutableString stringWithString:message];
     NSMutableArray *workingMessage = [[NSMutableArray alloc] init];
-
     for (NSInteger i = 0; i < message.length; i++) {
         NSInteger workingASCIIChar = [message characterAtIndex:i];
 NSLog(@"Loop %ul: workingASCIIChar = %C", i, workingASCIIChar);
@@ -46,7 +46,10 @@ NSLog(@"Loop %ul: workingASCIIChar = %C", i, workingASCIIChar);
         [workingMessage addObject:[[NSString stringWithFormat:@"%C", (unichar)workingASCIIChar]mutableCopy]];
     } //closes for-loop
     
-    return [workingMessage copy];
+    NSLog(@"%@", [[workingMessage class] description]);
+    NSLog(@"%@", [[workingMessage[0] class] description]);
+    
+    return [workingMessage componentsJoinedByString:@""];
 }
 
 
